@@ -4,11 +4,10 @@ pragma solidity ^0.8.0;
 contract CrabShops {
     struct Shop {
         bytes32 shopName;
-        Menu[] menus;
+        address owner;
     }
 
     struct Menu {
-        uint256 menuId;
         bytes32 menuName;
         uint256 menuPrice;
         uint256 menuStock;
@@ -18,6 +17,7 @@ contract CrabShops {
     mapping(uint256 => uint256[]) public districtShops;
     mapping(uint256 => Shop) public shopDetails;
     mapping(uint256 => bytes32) public shopDataHash;
+    mapping(uint256 => mapping(uint256 => Menu)) public shopMenus;
 
     function createShop(
         bytes32 _dataHash,
@@ -38,7 +38,7 @@ contract CrabShops {
             bytes32 menuName = _menuName[i];
             uint256 menuPrice = _menuPrice[i];
             uint256 menuStock = _menuStock[i];
-            shop.menus.push(Menu(menuId, menuName, menuPrice, menuStock));
+            shopMenus[shopId][menuId] = Menu(menuName, menuPrice, menuStock);
         }
         shopDataHash[shopId] = _dataHash;
     }
